@@ -1,13 +1,60 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "bootstrap/dist/css/bootstrap.min.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AppContext } from "./context/AppContext";
+import Error from "./pages/Error";
+import Login from "./pages/LoginPage";
+import NewAwards from "./pages/NewAwards";
+import Detail from "./pages/Detail";
+import Sale from "./pages/Sale";
+import Seller from "./pages/Seller";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const route = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <Error />,
+    children: [
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/newaward",
+        element: <NewAwards />,
+      },
+      {
+        path: "/detail",
+        element: <Detail />,
+      },
+      {
+        path: "/sale",
+        element: <Sale />,
+      },
+      {
+        path: "/newseller",
+        element: <Seller />,
+      },
+    ],
+  },
+]);
+
+const initialState = {
+  user: {
+    nome: null,
+  },
+  token: null,
+};
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <AppContext initialState={initialState}>
+      <RouterProvider router={route} />
+    </AppContext>
   </React.StrictMode>
 );
 
