@@ -30,8 +30,8 @@ function Sale() {
   };
 
   const handleClick = (cota) => {
-    if (cota.payd) return;
-    if (cota.pendig) return;
+    if (cota.status === "pending") return;
+    if (cota.status === "payd") return;
     handleShow();
     getCotaAction(dispatch, cota);
   };
@@ -133,12 +133,8 @@ function Sale() {
                       number={
                         cota.number < 10 ? `0${cota.number}` : cota.number
                       }
-                      varint={
-                        cota.payd
-                          ? "danger"
-                          : cota.pendig
-                          ? "warning"
-                          : "success"
+                      variant={
+                        cota.status === "free" ? "bg-success" : "bg-danger"
                       }
                     />
                   </Col>

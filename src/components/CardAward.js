@@ -9,6 +9,7 @@ function CardAward({
   children,
   id,
   isAdmin,
+  variant,
 }) {
   const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ function CardAward({
     >
       <div className="p-2 text-center">
         Status:{" "}
-        <div className="bg-success text-light text-center rounded-2 my-auto">
+        <div className={`${variant} text-light text-center rounded-2 my-auto`}>
           {status}: {children}{" "}
         </div>{" "}
       </div>

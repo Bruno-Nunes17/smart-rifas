@@ -16,13 +16,14 @@ function NewAwards() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const dataPremio = new Date(e.target.form.date.value)
     const body = {
       title: e.target.form.title.value,
       description: e.target.form.description.value,
       image: e.target.form.image.value,
       numbers: e.target.form.numbers.value,
       price: e.target.form.price.value,
-      date: e.target.form.date.value,
+      date: dataPremio,
     };
     newRifa(body);
     setShowFeedBack(true);
@@ -81,7 +82,7 @@ function NewAwards() {
           <Row>
             <Form.Group className="mb-3" controlId="date">
               <Form.Label>Data da premiação</Form.Label>
-              <Form.Control type="date" placeholder="" />
+              <Form.Control type="datetime-local" placeholder="" />
             </Form.Group>
           </Row>
           <Button

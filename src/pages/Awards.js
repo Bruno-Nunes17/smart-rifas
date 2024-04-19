@@ -1,6 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
-import { CheckCircleOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import CardAward from "../components/CardAward";
 import { useAppContext } from "../context/AppContext";
 import { useEffect } from "react";
@@ -11,6 +11,15 @@ import { getRifasSuccessType } from "../context/types";
 function Awards() {
   const { state, dispatch } = useAppContext();
   const navigate = useNavigate();
+
+  const checkDate = (date) => {
+    const dataRifa = new Date(date);
+    const dataAtual = new Date();
+    if (dataAtual > dataRifa) {
+      return true;
+    }
+    return false;
+  };
 
   useEffect(() => {
     if (!state.token) navigate("/login");
@@ -50,11 +59,12 @@ function Awards() {
               <CardAward
                 isAdmin={state.user.admin}
                 id={rifa._id}
-                children={<CheckCircleOutlined className="p-1" />}
-                status={rifa.date === Date.now ? "Finalizado" : "Em andamento"}
+                children={checkDate(rifa.date) ? <CheckCircleOutlined className="p-1" /> : <ClockCircleOutlined className="p-1"/>}
+                status={checkDate(rifa.date) ? "Finalizado" : "Em andamento"}
                 title={rifa.title}
                 description={rifa.description}
                 image={rifa.image}
+                variant={checkDate(rifa.date) ? "bg-success" : "bg-warning"}
               />
             </Col>
           ))}
