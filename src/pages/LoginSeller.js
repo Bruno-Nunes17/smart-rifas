@@ -6,31 +6,30 @@ import Form from "react-bootstrap/Form";
 import Alert from "../components/Alert";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
-import { loginAction } from "../context/action";
+import { loginSellerAction } from "../context/action";
 import { useEffect, useState } from "react";
 
-function Login() {
+function LoginSeller() {
   const { state, dispatch } = useAppContext();
   const [showFeedBack, setShowFeedBack] = useState(false);
   const navigate = useNavigate();
 
   const login = async (body) => {
-    loginAction(dispatch, body);
+    loginSellerAction(dispatch, body);
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
+
     const body = {
-      email: e.target.form.email.value,
+      telephone: e.target.form.telefone.value,
       password: e.target.form.password.value,
     };
     login(body);
     setShowFeedBack(true);
   };
 
-  useEffect(() => {
-    if (state.token) navigate("/");
-  });
+  useEffect(()=> {if(state.token) navigate('/')})
 
   return (
     <Container className="p-5">
@@ -43,12 +42,11 @@ function Login() {
               variant={state.error ? "danger" : "success"}
             />
           )}
-
           <Form autoComplete="off">
             <h1 className="text-center mb-5">Conecte-se</h1>
-            <Form.Group className="mb-3" controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" placeholder="Insira seu email" />
+            <Form.Group className="mb-3" controlId="telefone">
+              <Form.Label>Telefone</Form.Label>
+              <Form.Control type="tel" placeholder="Insira seu telefone" />
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="password">
@@ -67,15 +65,15 @@ function Login() {
           </Form>
         </Col>
         <p
-          onClick={() => navigate("/login/vendedor")}
+          onClick={() => navigate("/login")}
           className="mt-3 text-primary"
           style={{ cursor: "pointer" }}
         >
-          Entrar como vendedor
+          Entrar como administrador
         </p>
       </Row>
     </Container>
   );
 }
 
-export default Login;
+export default LoginSeller;

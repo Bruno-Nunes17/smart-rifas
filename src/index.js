@@ -3,39 +3,57 @@ import ReactDOM from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom";
 import { AppContext } from "./context/AppContext";
 import Error from "./pages/Error";
 import Login from "./pages/LoginPage";
 import NewAwards from "./pages/NewAwards";
+import Awards from "./pages/Awards";
 import Detail from "./pages/Detail";
 import Sale from "./pages/Sale";
 import Seller from "./pages/Seller";
+import LoginSeller from "./pages/LoginSeller";
 
-const route = createBrowserRouter([
+const privateRoutes = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <Error />,
     children: [
       {
+        path: "/",
+        element: <Navigate to={"/rifas"} />,
+      },
+      {
+        path: "/rifas",
+        element: <Awards />,
+      },
+      {
         path: "/login",
         element: <Login />,
       },
       {
-        path: "/newaward",
+        path: "/login/vendedor",
+        element: <LoginSeller />,
+      },
+      {
+        path: "/novarifa",
         element: <NewAwards />,
       },
       {
-        path: "/detail",
+        path: "/detalhes/:id",
         element: <Detail />,
       },
       {
-        path: "/sale",
+        path: "/cotas/:id",
         element: <Sale />,
       },
       {
-        path: "/newseller",
+        path: "/cadastrar/vendedor",
         element: <Seller />,
       },
     ],
@@ -43,17 +61,18 @@ const route = createBrowserRouter([
 ]);
 
 const initialState = {
-  user: {
-    nome: null,
-  },
+  user: {},
   token: null,
+  error: [],
+  rifas: [],
+  rifa: [],
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AppContext initialState={initialState}>
-      <RouterProvider router={route} />
+      <RouterProvider router={privateRoutes} />
     </AppContext>
   </React.StrictMode>
 );

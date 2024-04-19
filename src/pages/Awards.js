@@ -1,13 +1,26 @@
-import { Col, Container, Row, Button, Card, CardText } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Col, Container, Row } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import { CheckCircleOutlined } from "@ant-design/icons";
+import CardAward from "../components/CardAward";
+import { useAppContext } from "../context/AppContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getRifasAction } from "../context/action";
+import { getRifasSuccessType } from "../context/types";
 
 function Awards() {
+  const { state, dispatch } = useAppContext();
   const navigate = useNavigate();
-  const handleClick = () => {
-    navigate("/detail");
-  };
+
+  useEffect(() => {
+    if (!state.token) navigate("/login");
+  });
+
+  useEffect(() => {
+    if (state.type !== getRifasSuccessType) {
+      getRifasAction(dispatch, state.token);
+    }
+  }, [dispatch, state.token, state.type]);
 
   return (
     <>
@@ -26,38 +39,25 @@ function Awards() {
 
       <Container className="p-5" fluid="sm">
         <Row>
-          <Col
-            xs={12}
-            md={4}
-            sm={1}
-            className="p-0 d-flex justify-content-center"
-          >
-            <Card
-              style={{ width: "15rem" }}
-              className="text-capitalize text-center "
+          {state.rifas.map((rifa, index) => (
+            <Col
+              key={index}
+              xs={12}
+              md={4}
+              sm={1}
+              className="p-0 d-flex justify-content-center"
             >
-              <CardText className="p-2 text-center">
-                Status:{" "}
-                <p className="bg-success text-light text-center rounded-2 my-auto">
-                  Finalizado <CheckCircleOutlined className="p-1" />{" "}
-                </p>{" "}
-              </CardText>
-              <Card.Img
-                style={{ cursor: "pointer" }}
-                onClick={() => navigate("/sale")}
-                className="mx-auto w-50"
-                variant="top"
-                src="https://casasfreire.agilecdn.com.br/celular-motorola-moto-e13-64g-branco_331121.png?v=28-398561947"
+              <CardAward
+                isAdmin={state.user.admin}
+                id={rifa._id}
+                children={<CheckCircleOutlined className="p-1" />}
+                status={rifa.date === Date.now ? "Finalizado" : "Em andamento"}
+                title={rifa.title}
+                description={rifa.description}
+                image={rifa.image}
               />
-              <Card.Body>
-                <Card.Title>Iphone 8 plus 256gb</Card.Title>
-                <Card.Text> uma breve descição</Card.Text>
-                <Button onClick={() => handleClick()} variant="warning">
-                  Mais Detalhes
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col>
+            </Col>
+          ))}
         </Row>
       </Container>
     </>
