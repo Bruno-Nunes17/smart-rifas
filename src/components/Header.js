@@ -42,14 +42,14 @@ function Header() {
             <Nav.Link
               style={{ cursor: "pointer" }}
               onClick={() => navigate("/cadastrar/vendedor")}
-              className="text-light"
+              className="text-light ms-1"
             >
               Cadastrar Vendedor
             </Nav.Link>
             <Nav.Link
               style={{ cursor: "pointer" }}
               onClick={() => navigate("/novarifa")}
-              className="text-light"
+              className="text-light ms-1"
             >
               Nova Premiação
             </Nav.Link>
@@ -59,7 +59,7 @@ function Header() {
         <Nav className="me-5 ms-auto ">
           {state.token && (
             <Nav.Link
-              className="text-light"
+              className="text-light ms-1"
               style={{ cursor: "pointer" }}
               onClick={() => handleLogout()}
             >

@@ -123,7 +123,7 @@ function Sale() {
                 {state.rifa.cotas.map((cota, index) => (
                   <Col
                     key={index}
-                    className="col-sm-3 col-md-4 col-lg-2 mt-2"
+                    className="col-sm-3 col-md-4 col-lg-2 mt-2 d-flex justify-content-center"
                     onClick={() => {
                       handleClick(cota);
                     }}
