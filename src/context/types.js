@@ -5,6 +5,9 @@ export const loginFailType = "login fail";
 export const logoutInitType = "logout init";
 export const logoutSuccessType = "logout success";
 
+export const isLoggedInitType = "isLogged init";
+export const isLoggedSuccessType = "isLogged success";
+
 export const sellerRegisterInitType = "sellerRegister init";
 export const sellerRegisterSuccessType = "sellerRegister success";
 export const sellerRegisterFailType = "sellerRegister fail";

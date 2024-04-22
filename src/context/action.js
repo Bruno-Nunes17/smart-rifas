@@ -181,3 +181,20 @@ export const getCotaAction = async (dispatch, cota) => {
   dispatch(getCotaInitAction());
   dispatch(getCotaSuccessAction(cota));
 };
+
+//
+
+export const isLoggedInitAction = () => ({
+  type: types.isLoggedInitType,
+});
+
+export const isLoggedSuccessAction = (data) => ({
+  type: types.isLoggedSuccessType,
+  payload: data,
+});
+
+export const isLoggedAction = async (dispatch, cookie) => {
+  dispatch(isLoggedInitAction());
+  dispatch(isLoggedSuccessAction(cookie));
+};
+

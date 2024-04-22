@@ -4,9 +4,11 @@ import Alert from "../components/Alert";
 import { useAppContext } from "../context/AppContext";
 import { sellerRegisterAction } from "../context/action";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 function Seller() {
   const [showFeedBack, setShowFeedBack] = useState(false);
+  const [cookies] = useCookies(["User", "Token"]);
   const { state, dispatch } = useAppContext();
   const navigate = useNavigate();
 
@@ -26,7 +28,7 @@ function Seller() {
   };
 
   useEffect(() => {
-    if (!state.token) navigate("/login");
+    if (!state.token && !cookies.Token ) navigate("/login");
   });
 
   return (

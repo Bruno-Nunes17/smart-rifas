@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import {
   createBrowserRouter,
   RouterProvider,
-  Navigate,
+  // Navigate,
 } from "react-router-dom";
 import { AppContext } from "./context/AppContext";
 import Error from "./pages/Error";
@@ -17,6 +17,7 @@ import Detail from "./pages/Detail";
 import Sale from "./pages/Sale";
 import Seller from "./pages/Seller";
 import LoginSeller from "./pages/LoginSeller";
+import { CookiesProvider } from "react-cookie";
 
 const privateRoutes = createBrowserRouter([
   {
@@ -24,10 +25,10 @@ const privateRoutes = createBrowserRouter([
     element: <App />,
     errorElement: <Error />,
     children: [
-      {
-        path: "/",
-        element: <Navigate to={"/rifas"} />,
-      },
+      // {
+      //   path: "/",
+      //   element: <Navigate to={"/rifas"} />,
+      // },
       {
         path: "/rifas",
         element: <Awards />,
@@ -71,9 +72,11 @@ const initialState = {
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AppContext initialState={initialState}>
-      <RouterProvider router={privateRoutes} />
-    </AppContext>
+    <CookiesProvider defaultSetOptions={{ path: '/' }}>
+      <AppContext initialState={initialState}>
+        <RouterProvider router={privateRoutes} />
+      </AppContext>
+    </CookiesProvider>
   </React.StrictMode>
 );
 

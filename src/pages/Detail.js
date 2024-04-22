@@ -1,14 +1,21 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Col, Container, Row, Card } from "react-bootstrap";
 import { useAppContext } from "../context/AppContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { getRifaAction } from "../context/action";
 import { getRifaSuccessType } from "../context/types";
+import { useCookies } from "react-cookie";
 
 function Detail() {
   const { state, dispatch } = useAppContext();
+  const [cookies] = useCookies(["User", "Token"]);
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!state.token && !cookies.Token ) navigate("/login");
+  });
 
   useEffect(() => {
     if (state.type !== getRifaSuccessType) {
@@ -21,7 +28,7 @@ function Detail() {
       {state.type === getRifaSuccessType && (
         <Container className="text-center text-capitalize mt-3 p-5">
           <Row>
-            <h1>{state.rifa.title}</h1>
+            <h1>{state.rifa ? state.rifa.title: "titulo"}</h1>
           </Row>
           <Row className="text-center my-3">
             <h2>Numeros</h2>

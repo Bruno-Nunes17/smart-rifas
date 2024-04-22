@@ -4,9 +4,11 @@ import Alert from "../components/Alert";
 import { useAppContext } from "../context/AppContext";
 import { newRifaAction } from "../context/action";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 function NewAwards() {
   const [showFeedBack, setShowFeedBack] = useState(false);
+  const [cookies] = useCookies(["User", "Token"]);
   const { state, dispatch } = useAppContext();
   const navigate = useNavigate();
 
@@ -30,7 +32,7 @@ function NewAwards() {
   };
 
   useEffect(() => {
-    if (!state.token) navigate("/login");
+    if (!state.token && !cookies.Token ) navigate("/login");
   });
 
   return (

@@ -5,15 +5,18 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getCotaAction, getRifaAction } from "../context/action";
 import { useAppContext } from "../context/AppContext";
 import { getRifaSuccessType } from "../context/types";
+import { useCookies } from "react-cookie";
 
 function Sale() {
   const [show, setShow] = useState(false);
   const { state, dispatch } = useAppContext();
+  const [cookies] = useCookies(["User", "Token"]);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -37,6 +40,10 @@ function Sale() {
   };
 
   useEffect(() => {
+    if (!state.token && !cookies.Token ) navigate("/login");
+  });
+
+  useEffect(() => {
     if (state.type !== getRifaSuccessType) {
       getRifaAction(dispatch, id, state.token);
     }
@@ -50,7 +57,7 @@ function Sale() {
             <Modal.Title>Modal heading</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form id="cotas">
+            <Form id="cotas" autoComplete="off">
               <Form.Group className="mb-3" controlId="nome">
                 <Form.Label>Nome</Form.Label>
                 <Form.Control
@@ -101,7 +108,7 @@ function Sale() {
           <>
             <Container className="p-5 text-capitalize">
               <Row className="my-3 text-center">
-                <h4>{state.rifa.title}</h4>
+                <h4>{state.rifa ? state.rifa.title: "titulo"}</h4>
               </Row>
               <Row>
                 <div className="mt-3 text-capitalize text-center">
@@ -120,7 +127,7 @@ function Sale() {
             </Container>
             <Container>
               <Row className="m-3 gx-3" sm={2}>
-                {state.rifa.cotas.map((cota, index) => (
+                {state.rifa && state.rifa.cotas.map((cota, index) => (
                   <Col
                     key={index}
                     className="col-sm-3 col-md-4 col-lg-2 mt-2 d-flex justify-content-center"

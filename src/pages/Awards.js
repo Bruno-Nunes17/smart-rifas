@@ -7,9 +7,11 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRifasAction } from "../context/action";
 import { getRifasSuccessType } from "../context/types";
+import { useCookies } from "react-cookie";
 
 function Awards() {
   const { state, dispatch } = useAppContext();
+  const [cookies] = useCookies(["User", "Token"]);
   const navigate = useNavigate();
 
   const checkDate = (date) => {
@@ -22,7 +24,11 @@ function Awards() {
   };
 
   useEffect(() => {
-    if (!state.token) navigate("/login");
+    if (!state.token && !cookies.Token ) navigate("/login");
+  });
+
+  useEffect(() => {
+    if (state.error.length > 0) navigate("/login");
   });
 
   useEffect(() => {
@@ -48,26 +54,33 @@ function Awards() {
 
       <Container className="p-5" fluid="sm">
         <Row>
-          {state.rifas.map((rifa, index) => (
-            <Col
-              key={index}
-              xs={12}
-              md={4}
-              sm={1}
-              className="p-0 d-flex justify-content-center"
-            >
-              <CardAward
-                isAdmin={state.user.admin}
-                id={rifa._id}
-                children={checkDate(rifa.date) ? <CheckCircleOutlined className="p-1" /> : <ClockCircleOutlined className="p-1"/>}
-                status={checkDate(rifa.date) ? "Finalizado" : "Em andamento"}
-                title={rifa.title}
-                description={rifa.description}
-                image={rifa.image}
-                variant={checkDate(rifa.date) ? "bg-success" : "bg-warning"}
-              />
-            </Col>
-          ))}
+          {state.rifas &&
+            state.rifas.map((rifa, index) => (
+              <Col
+                key={index}
+                xs={12}
+                md={4}
+                sm={1}
+                className="p-0 d-flex justify-content-center"
+              >
+                <CardAward
+                  isAdmin={state.user.admin}
+                  id={rifa._id}
+                  children={
+                    checkDate(rifa.date) ? (
+                      <CheckCircleOutlined className="p-1" />
+                    ) : (
+                      <ClockCircleOutlined className="p-1" />
+                    )
+                  }
+                  status={checkDate(rifa.date) ? "Finalizado" : "Em andamento"}
+                  title={rifa.title}
+                  description={rifa.description}
+                  image={rifa.image}
+                  variant={checkDate(rifa.date) ? "bg-success" : "bg-warning"}
+                />
+              </Col>
+            ))}
         </Row>
       </Container>
     </>

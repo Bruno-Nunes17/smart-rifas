@@ -27,6 +27,8 @@ export const getRifas = async (token) => {
     };
   } catch (e) {
     console.log(e);
+    const { error } = e.response.data;
+    return { error };
   }
 };
 
@@ -41,7 +43,8 @@ export const getRifa = async (id, token) => {
       error: [],
     };
   } catch (e) {
-    console.log(e);
+    const { error } = e.response.data;
+    return { error };
   }
 };
 

@@ -8,11 +8,16 @@ import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { loginAction } from "../context/action";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 function Login() {
   const { state, dispatch } = useAppContext();
+  const [, setCookie] = useCookies(["User", "Token"]);
   const [showFeedBack, setShowFeedBack] = useState(false);
   const navigate = useNavigate();
+
+  const expirationDate = new Date();
+  expirationDate.setTime(expirationDate.getTime() + 2 * 60 * 60 * 1000);
 
   const login = async (body) => {
     loginAction(dispatch, body);
@@ -29,7 +34,11 @@ function Login() {
   };
 
   useEffect(() => {
-    if (state.token) navigate("/");
+    if (state.token) {
+      navigate("/rifas");
+      setCookie("User", state.user, { path: "/", expires: expirationDate });
+      setCookie("Token", state.token, { path: "/", expires: expirationDate });
+    }
   });
 
   return (

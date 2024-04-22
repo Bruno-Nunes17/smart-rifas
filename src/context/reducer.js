@@ -50,6 +50,13 @@ export function reducer(state, action) {
         type: types.getCotaSuccessType,
         cota: action.payload,
       };
+      case types.isLoggedSuccessType:
+      return {
+        ...state,
+        type: types.isLoggedSuccessType,
+        user: { ...action.payload.User },
+        token: action.payload.Token,
+      };
     case types.newRifaSuccessType:
       return {
         ...state,

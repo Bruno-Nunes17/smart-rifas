@@ -4,13 +4,17 @@ import { useAppContext } from "../context/AppContext";
 import { logoutAction } from "../context/action";
 import * as types from "../context/types";
 import { useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 function Header() {
   const navigate = useNavigate();
   const { state, dispatch } = useAppContext();
+  const [, , removeCookie] = useCookies();
 
   const login = async () => {
     logoutAction(dispatch);
+    removeCookie('User', { path: '/' });
+    removeCookie('Token', { path: '/' });
   };
 
   const handleLogout = () => {
@@ -27,7 +31,7 @@ function Header() {
         className="ms-3 bold"
         onClick={() => {
           if (state.token) {
-            navigate("/");
+            navigate("/rifas");
           }
         }}
       >
