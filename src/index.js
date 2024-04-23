@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import {
   createBrowserRouter,
   RouterProvider,
-  // Navigate,
+  Navigate,
 } from "react-router-dom";
 import { AppContext } from "./context/AppContext";
 import Error from "./pages/Error";
@@ -25,10 +25,10 @@ const privateRoutes = createBrowserRouter([
     element: <App />,
     errorElement: <Error />,
     children: [
-      // {
-      //   path: "/",
-      //   element: <Navigate to={"/rifas"} />,
-      // },
+      {
+        path: "/",
+        element: <Navigate to={"/rifas"} />,
+      },
       {
         path: "/rifas",
         element: <Awards />,
