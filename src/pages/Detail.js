@@ -14,10 +14,11 @@ function Detail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!state.token && !cookies.Token ) navigate("/login");
+    if (!state.token && !cookies.Token) navigate("/login");
   });
 
   useEffect(() => {
+    if (!state.type) return;
     if (state.type !== getRifaSuccessType) {
       getRifaAction(dispatch, id, state.token);
     }
@@ -25,10 +26,10 @@ function Detail() {
 
   return (
     <>
-      {state.type === getRifaSuccessType && (
+      {state.user.admin && (
         <Container className="text-center text-capitalize mt-3 p-5">
           <Row>
-            <h1>{state.rifa ? state.rifa.title: "titulo"}</h1>
+            <h1>{state.rifa ? state.rifa.title : "titulo"}</h1>
           </Row>
           <Row className="text-center my-3">
             <h2>Numeros</h2>
@@ -65,27 +66,29 @@ function Detail() {
               <h4>R$ 125</h4>
             </Col>
           </Row>
-          <Row className="text-center my-3 text-start">
-            <h2>Vendedores</h2>
-          </Row>
-          <Row>
-            <Col>
-              <Card style={{ width: "15rem" }}>
-                <UserOutlined className=" p-2" />
-                <Card.Body className="text-center">
-                  <Card.Title>João</Card.Title>
-                  <div>
-                    <h4>Total Vendido</h4>
-                    <div>
-                      <p>10 de 10</p>
-                    </div>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
         </Container>
       )}
+      <Container className="text-center text-capitalize mt-3 p-5">
+        <Row className="text-center my-3 text-start">
+          <h2>Vendedores</h2>
+        </Row>
+        <Row>
+          <Col>
+            <Card style={{ width: "15rem" }}>
+              <UserOutlined className=" p-2" />
+              <Card.Body className="text-center">
+                <Card.Title>João</Card.Title>
+                <div>
+                  <h4>Total Vendido</h4>
+                  <div>
+                    <p>10 de 10</p>
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 }

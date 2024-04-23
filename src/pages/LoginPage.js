@@ -13,14 +13,14 @@ import { useCookies } from "react-cookie";
 function Login() {
   const { state, dispatch } = useAppContext();
   const [, setCookie] = useCookies(["User", "Token"]);
-  const [showFeedBack, setShowFeedBack] = useState(false);
+  const [, setShowFeedBack] = useState(false);
   const navigate = useNavigate();
 
   const expirationDate = new Date();
   expirationDate.setTime(expirationDate.getTime() + 2 * 60 * 60 * 1000);
 
   const login = async (body) => {
-    loginAction(dispatch, body);
+   await loginAction(dispatch, body);
   };
 
   const handleLogin = async (e) => {
@@ -45,7 +45,7 @@ function Login() {
     <Container className="p-5">
       <Row>
         <Col>
-          {showFeedBack && (
+          {state.error.length > 0 && (
             <Alert
               message={state.error ? state.error : "Logado com sucesso"}
               onClose={() => setShowFeedBack(false)}

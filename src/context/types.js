@@ -27,3 +27,7 @@ export const getRifaFailType = "get Rifa fail";
 export const getCotaInitType = "get cota init";
 export const getCotaSuccessType = "get cota success";
 export const getCotaFailType = "get cota fail";
+
+export const sellCotaInitType = "sell cota init";
+export const sellCotaSuccessType = "sell cota success";
+export const sellCotaFailType = "sell cota fail";

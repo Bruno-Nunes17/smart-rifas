@@ -1,4 +1,4 @@
-import { Col, Container, InputGroup, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import CardNumber from "../components/CardNumber";
 import { useEffect, useState } from "react";
@@ -6,7 +6,11 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCotaAction, getRifaAction } from "../context/action";
+import {
+  getCotaAction,
+  getRifaAction,
+  sellCotaAction,
+} from "../context/action";
 import { useAppContext } from "../context/AppContext";
 import { getRifaSuccessType } from "../context/types";
 import { useCookies } from "react-cookie";
@@ -21,29 +25,44 @@ function Sale() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const sellCota = async (body) => {
+    await sellCotaAction(dispatch, body, state.token);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (
+      e.target.form.nome.value === "" ||
+      e.target.form.telefone.value === ""
+    ) {
+      return;
+    }
     const cota = state.cota;
     cota.client.nome = e.target.form.nome.value;
     cota.client.telefone = e.target.form.telefone.value;
-    cota.payd = true;
+    cota.status = e.target.form.pagamento.value;
     cota.seller.nome = state.user.name;
     cota.seller.telefone = state.user.email ? "" : state.user.telephone;
-    console.log(state, cota);
+
+    const body = { id, cota };
+
+    sellCota(body);
+    handleClose();
   };
 
   const handleClick = (cota) => {
-    if (cota.status === "pending") return;
-    if (cota.status === "payd") return;
+    if (cota.status !== "free") return;
     handleShow();
     getCotaAction(dispatch, cota);
   };
 
   useEffect(() => {
-    if (!state.token && !cookies.Token ) navigate("/login");
+    if (!state.token && !cookies.Token) navigate("/login");
   });
 
   useEffect(() => {
+    if (!state.type) return;
     if (state.type !== getRifaSuccessType) {
       getRifaAction(dispatch, id, state.token);
     }
@@ -74,16 +93,11 @@ function Sale() {
                   autoFocus
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="payd">
-                <Form.Label>Confirmar pagamento</Form.Label>
-                <InputGroup.Checkbox
-                  type="checkbox"
-                  aria-label="Confirmar pagamento"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="pending">
-                <Form.Label>Pagamento Pendente</Form.Label>
-                <InputGroup.Checkbox aria-label="Pagamento Pendente" />
+              <Form.Group className="mb-3" controlId="pagamento">
+                <Form.Select aria-label="Default select example">
+                  <option value="payd">Pagamento Confirmado</option>
+                  <option value="pending">Pagamento Pendente</option>
+                </Form.Select>
               </Form.Group>
             </Form>
           </Modal.Body>
@@ -108,7 +122,7 @@ function Sale() {
           <>
             <Container className="p-5 text-capitalize">
               <Row className="my-3 text-center">
-                <h4>{state.rifa ? state.rifa.title: "titulo"}</h4>
+                <h4>{state.rifa ? state.rifa.title : "titulo"}</h4>
               </Row>
               <Row>
                 <div className="mt-3 text-capitalize text-center">
@@ -127,25 +141,26 @@ function Sale() {
             </Container>
             <Container>
               <Row className="m-3 gx-3" sm={2}>
-                {state.rifa && state.rifa.cotas.map((cota, index) => (
-                  <Col
-                    key={index}
-                    className="col-sm-3 col-md-4 col-lg-2 mt-2 d-flex justify-content-center"
-                    onClick={() => {
-                      handleClick(cota);
-                    }}
-                  >
-                    <CardNumber
-                      style={{ cursor: "pointer" }}
-                      number={
-                        cota.number < 10 ? `0${cota.number}` : cota.number
-                      }
-                      variant={
-                        cota.status === "free" ? "bg-success" : "bg-danger"
-                      }
-                    />
-                  </Col>
-                ))}
+                {state.rifa &&
+                  state.rifa.cotas.map((cota, index) => (
+                    <Col
+                      key={index}
+                      className="col-sm-3 col-md-4 col-lg-2 mt-2 d-flex justify-content-center"
+                      onClick={() => {
+                        handleClick(cota);
+                      }}
+                    >
+                      <CardNumber
+                        style={{ cursor: "pointer" }}
+                        number={
+                          cota.number < 10 ? `0${cota.number}` : cota.number
+                        }
+                        variant={
+                          cota.status === "free" ? "bg-light" : "bg-success"
+                        }
+                      />
+                    </Col>
+                  ))}
               </Row>
             </Container>
           </>

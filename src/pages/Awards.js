@@ -6,7 +6,7 @@ import { useAppContext } from "../context/AppContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRifasAction } from "../context/action";
-import { getRifasSuccessType } from "../context/types";
+import { getRifasSuccessType, logoutSuccessType } from "../context/types";
 import { useCookies } from "react-cookie";
 
 function Awards() {
@@ -18,13 +18,13 @@ function Awards() {
     const dataRifa = new Date(date);
     const dataAtual = new Date();
     if (dataAtual > dataRifa) {
-      return true;
+      return;
     }
-    return false;
+    return dataRifa;
   };
 
   useEffect(() => {
-    if (!state.token && !cookies.Token ) navigate("/login");
+    if (!state.token && !cookies.Token) navigate("/login");
   });
 
   useEffect(() => {
@@ -32,6 +32,8 @@ function Awards() {
   });
 
   useEffect(() => {
+    if (state.type === logoutSuccessType) return;
+    if (!state.type) return;
     if (state.type !== getRifasSuccessType) {
       getRifasAction(dispatch, state.token);
     }
@@ -64,20 +66,21 @@ function Awards() {
                 className="p-0 d-flex justify-content-center"
               >
                 <CardAward
-                  isAdmin={state.user.admin}
                   id={rifa._id}
+                  clickable={checkDate(rifa.date)}
                   children={
-                    checkDate(rifa.date) ? (
+                    !checkDate(rifa.date) ? (
                       <CheckCircleOutlined className="p-1" />
                     ) : (
                       <ClockCircleOutlined className="p-1" />
                     )
                   }
-                  status={checkDate(rifa.date) ? "Finalizado" : "Em andamento"}
+                  status={!checkDate(rifa.date) ? "Finalizado" : "Em andamento"}
                   title={rifa.title}
                   description={rifa.description}
                   image={rifa.image}
-                  variant={checkDate(rifa.date) ? "bg-success" : "bg-warning"}
+                  variant={!checkDate(rifa.date) ? "bg-success" : "bg-warning"}
+                  date={rifa.date}
                 />
               </Col>
             ))}

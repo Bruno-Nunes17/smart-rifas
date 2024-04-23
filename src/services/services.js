@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "https://smart-rifas-api.vercel.app";
+const baseUrl = "http://192.168.0.103:4000";
 
 const defaulUser = {
   user: {},
@@ -114,4 +114,17 @@ export const sellerLogin = async (body) => {
 
 export const logout = async () => {
   return defaulUser;
+};
+
+export const sellCota = async (body, token) => {
+  const header = headerFormat(token);
+  try {
+    await axios.post(`${baseUrl}/rifa/sell`, body, header);
+    return {
+      error: [],
+    };
+  } catch (e) {
+    const { error } = e.response.data;
+    return { error };
+  }
 };

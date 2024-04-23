@@ -8,10 +8,17 @@ function CardAward({
   status,
   children,
   id,
-  isAdmin,
   variant,
+  date,
+  clickable,
 }) {
   const navigate = useNavigate();
+
+  const formatDate = (date) => {
+    const dataRifa = new Date(date);
+    const dataFormatada = dataRifa.toLocaleString("pt-BR");
+    return dataFormatada;
+  };
 
   return (
     <Card
@@ -26,7 +33,9 @@ function CardAward({
       </div>
       <Card.Img
         style={{ cursor: "pointer" }}
-        onClick={() => navigate(`/cotas/${id}`)}
+        onClick={() => {
+          if (clickable) navigate(`/cotas/${id}`);
+        }}
         className="mx-auto w-50"
         variant="top"
         src={image}
@@ -34,11 +43,12 @@ function CardAward({
       <Card.Body>
         <Card.Title>{title}</Card.Title>
         <Card.Text> {description}</Card.Text>
-        {isAdmin && (
-          <Button onClick={() => navigate(`/detalhes/${id}`)} variant="warning">
-            Mais Detalhes
-          </Button>
-        )}
+        <Button onClick={() => navigate(`/detalhes/${id}`)} variant="warning">
+          Mais Detalhes
+        </Button>
+        <Card.Footer className="text-muted mt-1">
+          {date ? formatDate(date) : ""}
+        </Card.Footer>
       </Card.Body>
     </Card>
   );

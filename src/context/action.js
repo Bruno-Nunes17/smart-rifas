@@ -198,3 +198,28 @@ export const isLoggedAction = async (dispatch, cookie) => {
   dispatch(isLoggedSuccessAction(cookie));
 };
 
+// Sell Cota
+
+export const sellCotaInitAction = () => ({
+  type: types.sellCotaInitType,
+});
+
+export const sellCotaSuccessAction = (data) => ({
+  type: types.sellCotaSuccessType,
+  payload: data,
+});
+
+export const sellCotaFailAction = (data) => ({
+  type: types.sellCotaFailType,
+  payload: data,
+});
+
+export const sellCotaAction = async (dispatch, body, token) => {
+  dispatch(sellCotaInitAction());
+  const data = await services.sellCota(body, token);
+  if (!data) {
+    dispatch(getRifaFailAction(data));
+    return;
+  }
+  dispatch(sellCotaSuccessAction(data));
+};

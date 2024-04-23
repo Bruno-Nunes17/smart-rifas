@@ -13,8 +13,8 @@ function Header() {
 
   const login = async () => {
     logoutAction(dispatch);
-    removeCookie('User', { path: '/' });
-    removeCookie('Token', { path: '/' });
+    removeCookie("User", { path: "/" });
+    removeCookie("Token", { path: "/" });
   };
 
   const handleLogout = () => {
@@ -28,6 +28,7 @@ function Header() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="primary" data-bs-theme="dark">
       <Navbar.Brand
+        style={{ cursor: "pointer" }}
         className="ms-3 bold"
         onClick={() => {
           if (state.token) {
