@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "http://192.168.0.103:4000";
+const baseUrl = "https://smart-rifas-api.vercel.app";
 
 const defaulUser = {
   user: {},
@@ -26,7 +26,20 @@ export const getRifas = async (token) => {
       rifas,
     };
   } catch (e) {
-    console.log(e);
+    const { error } = e.response.data;
+    return { error };
+  }
+};
+
+export const getSellers = async (token) => {
+  const header = headerFormat(token);
+  try {
+    const response = await axios.get(`${baseUrl}/sellers/show`, header);
+    const sellers = response.data;
+    return {
+      sellers,
+    };
+  } catch (e) {
     const { error } = e.response.data;
     return { error };
   }

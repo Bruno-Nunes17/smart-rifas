@@ -20,6 +20,10 @@ export const getRifasInitType = "getRifas init";
 export const getRifasSuccessType = "getRifas success";
 export const getRifasFailType = "getRifas fail";
 
+export const getSellersInitType = "getSellers init";
+export const getSellersSuccessType = "getSellers success";
+export const getSellersFailType = "getSellers fail";
+
 export const getRifaInitType = "get Rifa init";
 export const getRifaSuccessType = "get Rifa success";
 export const getRifaFailType = "get Rifa fail";

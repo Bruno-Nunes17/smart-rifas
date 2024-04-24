@@ -57,6 +57,16 @@ function Sale() {
     getCotaAction(dispatch, cota);
   };
 
+  const quotaStatus = (status) => {
+    if (status === "payd") {
+      return "bg-success";
+    }
+    if (status === "pending") {
+      return "bg-danger";
+    }
+    return "bg-light";
+  };
+
   useEffect(() => {
     if (!state.token && !cookies.Token) navigate("/login");
   });
@@ -156,7 +166,7 @@ function Sale() {
                           cota.number < 10 ? `0${cota.number}` : cota.number
                         }
                         variant={
-                          cota.status === "free" ? "bg-light" : "bg-success"
+                          cota.status ? quotaStatus(cota.status) : "bg-light"
                         }
                       />
                     </Col>

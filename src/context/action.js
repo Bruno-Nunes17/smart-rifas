@@ -223,3 +223,29 @@ export const sellCotaAction = async (dispatch, body, token) => {
   }
   dispatch(sellCotaSuccessAction(data));
 };
+
+// Get Sellers
+
+export const getSellersInitAction = () => ({
+  type: types.getSellersInitType,
+});
+
+export const getSellersSuccessAction = (data) => ({
+  type: types.getSellersSuccessType,
+  payload: data,
+});
+
+export const getSellersFailAction = (data) => ({
+  type: types.getSellersFailType,
+  payload: data,
+});
+
+export const getSellersAction = async (dispatch, token) => {
+  dispatch(getSellersInitAction());
+  const data = await services.getSellers(token);
+  if (!data) {
+    dispatch(getSellersFailAction(data));
+    return;
+  }
+  dispatch(getSellersSuccessAction(data));
+};

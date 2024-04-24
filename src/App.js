@@ -4,12 +4,14 @@ import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { isLoggedAction } from "./context/action";
 import { useAppContext } from "./context/AppContext";
+import { logoutSuccessType } from "./context/types";
 
 function App() {
   const { state, dispatch } = useAppContext();
   const [cookies] = useCookies(["User", "Token"]);
 
   useEffect(() => {
+    if (state.type === logoutSuccessType) return;
     if (state.token === null) {
       isLoggedAction(dispatch, cookies);
     }

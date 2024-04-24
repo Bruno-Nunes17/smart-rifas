@@ -37,6 +37,12 @@ export function reducer(state, action) {
         type: types.getRifasSuccessType,
         rifas: action.payload.rifas,
       };
+    case types.getSellersSuccessType:
+      return {
+        ...state,
+        type: types.getRifaSuccessType,
+        sellers: action.payload.sellers,
+      };
     case types.getRifaSuccessType:
       return {
         ...state,
@@ -50,19 +56,19 @@ export function reducer(state, action) {
         type: types.getCotaSuccessType,
         cota: action.payload,
       };
-      case types.sellCotaSuccessType:
+    case types.sellCotaSuccessType:
       return {
         ...state,
         type: types.sellCotaSuccessType,
         error: action.payload.error,
       };
-      case types.sellCotaFailType:
+    case types.sellCotaFailType:
       return {
         ...state,
         type: types.sellCotaFailType,
         error: action.payload.error,
       };
-      case types.isLoggedSuccessType:
+    case types.isLoggedSuccessType:
       return {
         ...state,
         type: types.isLoggedSuccessType,
