@@ -56,7 +56,7 @@ function LoginSeller() {
             <Button
               onClick={(e) => handleLogin(e)}
               className="w-100 mt-3"
-              variant="primary"
+              variant="dark"
               size="lg"
               type="submit"
             >

@@ -8,6 +8,15 @@ const defaulUser = {
   error: [],
 };
 
+export const checkDate = (date) => {
+  const dataRifa = new Date(date);
+  const dataAtual = new Date();
+  if (dataAtual > dataRifa) {
+    return;
+  }
+  return dataRifa;
+};
+
 const headerFormat = (token) => {
   const header = {
     headers: {
@@ -17,11 +26,23 @@ const headerFormat = (token) => {
   return header;
 };
 
-export const getRifas = async (token) => {
+export const getRifas = async (token, filter = "all") => {
   const header = headerFormat(token);
   try {
     const response = await axios.get(`${baseUrl}/rifas`, header);
-    const rifas = response.data;
+    let rifas = [];
+
+    if (filter === "all") return { rifas: response.data };
+
+    for (const rifa of response.data) {
+      const rifafiltrada = checkDate(rifa.date);
+      if (rifafiltrada && filter === "current") {
+        rifas.push(rifa);
+      }
+      if (!rifafiltrada && filter === "finish") {
+        rifas.push(rifa);
+      }
+    }
     return {
       rifas,
     };
@@ -45,12 +66,27 @@ export const getSellers = async (token) => {
   }
 };
 
-export const getRifa = async (id, token) => {
+export const getRifa = async (id, token, filter = "all") => {
+  let cotas = [];
   const header = headerFormat(token);
   const body = { id };
   try {
     const response = await axios.post(`${baseUrl}/rifa`, body, header);
     const rifa = response.data;
+
+    if (filter === "available") {
+      for (const cota of rifa.cotas) {
+        if (cota.status === "free") {
+          cotas.push(cota);
+        }
+      }
+      rifa.cotas = cotas;
+      return {
+        rifa,
+        error: [],
+      };
+    }
+
     return {
       rifa,
       error: [],

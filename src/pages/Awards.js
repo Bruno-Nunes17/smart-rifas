@@ -1,5 +1,4 @@
-import { Col, Container, Row } from "react-bootstrap";
-import Dropdown from "react-bootstrap/Dropdown";
+import { Col, Container, Form, Row } from "react-bootstrap";
 import { CheckCircleOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import CardAward from "../components/CardAward";
 import { useAppContext } from "../context/AppContext";
@@ -23,6 +22,10 @@ function Awards() {
     return dataRifa;
   };
 
+  const handlefilter = (filter) => {
+    getRifasAction(dispatch, state.token, filter);
+  };
+
   useEffect(() => {
     if (!state.token && !cookies.Token) navigate("/login");
   });
@@ -37,21 +40,24 @@ function Awards() {
     if (state.type !== getRifasSuccessType) {
       getRifasAction(dispatch, state.token);
     }
-  }, [dispatch, state.token, state.type]);
+  }, [dispatch, state.token]);
 
   return (
     <>
-      <div className="mt-3 text-capitalize text-center">
-        <Dropdown>
-          <Dropdown.Toggle variant="light" id="dropdown-basic">
-            Filtrar
-          </Dropdown.Toggle>
-
-          <Dropdown.Menu>
-            <Dropdown.Item>Finalizados</Dropdown.Item>
-            <Dropdown.Item>Em andamento</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+      <div className="mt-3 text-capitalize text-center d-flex justify-content-center">
+        <Form>
+          <p>Filtrar:</p>
+          <Form.Select
+            aria-label="Default select example"
+            onChange={(e) => {
+              handlefilter(e.target.value);
+            }}
+          >
+            <option value="all">Todos</option>
+            <option value="finish">Finalizado</option>
+            <option value="current">Em andamento</option>
+          </Form.Select>
+        </Form>
       </div>
 
       <Container className="p-5" fluid="sm">
@@ -79,8 +85,11 @@ function Awards() {
                   title={rifa.title}
                   description={rifa.description}
                   image={rifa.image}
-                  variant={!checkDate(rifa.date) ? "bg-success" : "bg-warning"}
+                  variant={
+                    !checkDate(rifa.date) ? "bg-secondary" : "bg-success"
+                  }
                   date={rifa.date}
+                  price={rifa.price}
                 />
               </Col>
             ))}

@@ -97,7 +97,7 @@ function Detail() {
             <Col>
               <h4>
                 {state.rifa.cotas
-                  ? calcProfit("payd", state.rifa.cotas, state.rifa.price)
+                  ? `R$ ${calcProfit("payd", state.rifa.cotas, state.rifa.price)}`
                   : "indisponivel"}
               </h4>
             </Col>

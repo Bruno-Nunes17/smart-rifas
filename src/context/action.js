@@ -99,9 +99,9 @@ export const getRifasFailAction = (data) => ({
   payload: data,
 });
 
-export const getRifasAction = async (dispatch, token) => {
+export const getRifasAction = async (dispatch, token, filter) => {
   dispatch(getRifasInitAction());
-  const data = await services.getRifas(token);
+  const data = await services.getRifas(token, filter);
   if (!data) {
     dispatch(getRifasFailAction(data));
     return;
@@ -151,9 +151,9 @@ export const getRifaFailAction = (data) => ({
   payload: data,
 });
 
-export const getRifaAction = async (dispatch, id, token) => {
+export const getRifaAction = async (dispatch, id, token, filter) => {
   dispatch(getRifaInitAction());
-  const data = await services.getRifa(id, token);
+  const data = await services.getRifa(id, token, filter);
   if (!data) {
     dispatch(getRifaFailAction(data));
     return;

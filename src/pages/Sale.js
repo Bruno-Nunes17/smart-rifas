@@ -1,5 +1,4 @@
 import { Col, Container, Row } from "react-bootstrap";
-import Dropdown from "react-bootstrap/Dropdown";
 import CardNumber from "../components/CardNumber";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
@@ -51,6 +50,10 @@ function Sale() {
     handleClose();
   };
 
+  const handlefilter = (filter) => {
+    getRifaAction(dispatch, id, state.token, filter);
+  };
+
   const handleClick = (cota) => {
     if (cota.status !== "free") return;
     handleShow();
@@ -76,7 +79,7 @@ function Sale() {
     if (state.type !== getRifaSuccessType) {
       getRifaAction(dispatch, id, state.token);
     }
-  }, [id, dispatch, state.token, state.type]);
+  }, [id, dispatch, state.token]);
 
   return (
     <>
@@ -126,56 +129,51 @@ function Sale() {
           </Modal.Footer>
         </Modal>
       </>
-
-      <>
-        {state.type === getRifaSuccessType && (
-          <>
-            <Container className="p-5 text-capitalize">
-              <Row className="my-3 text-center">
-                <h4>{state.rifa ? state.rifa.title : "titulo"}</h4>
-              </Row>
-              <Row>
-                <div className="mt-3 text-capitalize text-center">
-                  <Dropdown>
-                    <Dropdown.Toggle variant="light" id="dropdown-basic">
-                      Filtrar
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                      <Dropdown.Item>Todos</Dropdown.Item>
-                      <Dropdown.Item>Disponiveis</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-              </Row>
-            </Container>
-            <Container>
-              <Row className="m-3 gx-3" sm={2}>
-                {state.rifa &&
-                  state.rifa.cotas.map((cota, index) => (
-                    <Col
-                      key={index}
-                      className="col-sm-3 col-md-4 col-lg-2 mt-2 d-flex justify-content-center"
-                      onClick={() => {
-                        handleClick(cota);
-                      }}
-                    >
-                      <CardNumber
-                        style={{ cursor: "pointer" }}
-                        number={
-                          cota.number < 10 ? `0${cota.number}` : cota.number
-                        }
-                        variant={
-                          cota.status ? quotaStatus(cota.status) : "bg-light"
-                        }
-                      />
-                    </Col>
-                  ))}
-              </Row>
-            </Container>
-          </>
-        )}
-      </>
+      <Container className="p-5 text-capitalize">
+        <Row className="my-3 text-center">
+          <h4>{state.rifa ? state.rifa.title : "titulo"}</h4>
+        </Row>
+        <Row>
+          <div className="mt-3 text-capitalize text-center d-flex justify-content-center">
+            <Form>
+              <p>Filtrar:</p>
+              <Form.Select
+                aria-label="Default select example"
+                onChange={(e) => {
+                  handlefilter(e.target.value);
+                }}
+              >
+                <option value="all">Todos</option>
+                <option value="available">Disponivels</option>
+              </Form.Select>
+            </Form>
+          </div>
+        </Row>
+      </Container>
+      {state.type === getRifaSuccessType && (
+        <Container>
+          <Row className="m-3 gx-3" sm={2}>
+            {state.rifa &&
+              state.rifa.cotas.map((cota, index) => (
+                <Col
+                  key={index}
+                  className="col-sm-3 col-md-4 col-lg-2 mt-2 d-flex justify-content-center"
+                  onClick={() => {
+                    handleClick(cota);
+                  }}
+                >
+                  <CardNumber
+                    style={{ cursor: "pointer" }}
+                    number={cota.number < 10 ? `0${cota.number}` : cota.number}
+                    variant={
+                      cota.status ? quotaStatus(cota.status) : "bg-light"
+                    }
+                  />
+                </Col>
+              ))}
+          </Row>
+        </Container>
+      )}
     </>
   );
 }

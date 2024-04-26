@@ -11,6 +11,7 @@ function CardAward({
   variant,
   date,
   clickable,
+  price,
 }) {
   const navigate = useNavigate();
 
@@ -25,31 +26,38 @@ function CardAward({
       style={{ width: "15rem" }}
       className="text-capitalize text-center mt-2"
     >
-      <div className="p-2 text-center">
+      <div className="text-center">
         Status:{" "}
-        <div className={`${variant} text-light text-center rounded-2 my-auto`}>
+        <div className={`${variant} text-light text-center  my-auto`}>
           {status}: {children}{" "}
         </div>{" "}
       </div>
-      <Card.Img
-        style={{ cursor: "pointer" }}
-        onClick={() => {
-          if (clickable) navigate(`/cotas/${id}`);
-        }}
-        className="mx-auto w-50"
-        variant="top"
-        src={image}
-      />
-      <Card.Body>
+      <div className="d-flex justify-content-center">
+        <Card.Img
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            if (clickable) navigate(`/cotas/${id}`);
+          }}
+          className="mx-auto w-50 m-2"
+          variant="top"
+          src={image}
+        />
+      </div>
+      <Card.Body className="d-flex justify-content-end flex-column">
         <Card.Title>{title}</Card.Title>
         <Card.Text> {description}</Card.Text>
         <Button onClick={() => navigate(`/detalhes/${id}`)} variant="warning">
           Mais Detalhes
         </Button>
-        <Card.Footer className="text-muted mt-1">
-          {date ? formatDate(date) : ""}
-        </Card.Footer>
       </Card.Body>
+      <div className="text-center">
+        <div className={"bg-success py-1  text-light text-center my-auto"}>
+          Valor: R$ {Number.isInteger(price) ? `${price},00` : price}
+        </div>
+      </div>
+      <Card.Footer className="text-muted">
+        {date ? formatDate(date) : ""}
+      </Card.Footer>
     </Card>
   );
 }
