@@ -40,6 +40,7 @@ function Awards() {
     if (state.type !== getRifasSuccessType) {
       getRifasAction(dispatch, state.token);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, state.token]);
 
   return (

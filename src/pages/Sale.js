@@ -79,6 +79,7 @@ function Sale() {
     if (state.type !== getRifaSuccessType) {
       getRifaAction(dispatch, id, state.token);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, dispatch, state.token]);
 
   return (
