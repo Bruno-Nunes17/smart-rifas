@@ -28,6 +28,7 @@ module.exports = {
         "react"
     ],
     "rules": {
-        "prop-types": "no"
+        "prop-types": 0,
+        "react/react-in-jsx-scope": 0,
     }
 }
