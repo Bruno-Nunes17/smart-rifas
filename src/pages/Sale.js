@@ -80,7 +80,7 @@ function Sale() {
       getRifaAction(dispatch, id, state.token);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, dispatch, state.token]);
+  }, [id, dispatch, state.token, state.rifa]);
 
   return (
     <>
