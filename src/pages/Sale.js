@@ -5,11 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  getCotaAction,
-  getRifaAction,
-  sellCotaAction,
-} from "../context/action";
+import { getRifaAction, sellCotaAction } from "../context/action";
 import { useAppContext } from "../context/AppContext";
 import { getRifaSuccessType } from "../context/types";
 import { useCookies } from "react-cookie";
@@ -20,12 +16,17 @@ function Sale() {
   const [cookies] = useCookies(["User", "Token"]);
   const { id } = useParams();
   const navigate = useNavigate();
+  const [showCota, setCota] = useState();
+  const [showCotas, setCotas] = useState();
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+  };
   const handleShow = () => setShow(true);
 
   const sellCota = async (body) => {
     await sellCotaAction(dispatch, body, state.token);
+    return setCota(undefined);
   };
 
   const handleSubmit = (e) => {
@@ -37,7 +38,7 @@ function Sale() {
     ) {
       return;
     }
-    const cota = state.cota;
+    const cota = showCota;
     cota.client.nome = e.target.form.nome.value;
     cota.client.telefone = e.target.form.telefone.value;
     cota.status = e.target.form.pagamento.value;
@@ -50,14 +51,23 @@ function Sale() {
     handleClose();
   };
 
-  const handlefilter = (filter) => {
-    getRifaAction(dispatch, id, state.token, filter);
+  const handlefilter = (filter = "all") => {
+    let cotas = [];
+    if (filter === "available") {
+      for (const cota of state.rifa.cotas) {
+        if (cota.status === "free") {
+          cotas.push(cota);
+        }
+      }
+      return setCotas(cotas);
+    }
+    setCotas(state.rifa.cotas);
   };
 
   const handleClick = (cota) => {
     if (cota.status !== "free") return;
     handleShow();
-    getCotaAction(dispatch, cota);
+    setCota(cota);
   };
 
   const quotaStatus = (status) => {
@@ -65,7 +75,7 @@ function Sale() {
       return "bg-success";
     }
     if (status === "pending") {
-      return "bg-danger";
+      return "bg-warning";
     }
     return "bg-light";
   };
@@ -79,8 +89,13 @@ function Sale() {
     if (state.type !== getRifaSuccessType) {
       getRifaAction(dispatch, id, state.token);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, dispatch, state.token, state.rifa]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, state.token, JSON.stringify(showCota)]);
+
+  useEffect(() => {
+    if (state.rifa) setCotas(state.rifa.cotas);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(state.rifa)]);
 
   return (
     <>
@@ -154,8 +169,8 @@ function Sale() {
       {state.type === getRifaSuccessType && (
         <Container>
           <Row className="m-3 gx-3" sm={2}>
-            {state.rifa &&
-              state.rifa.cotas.map((cota, index) => (
+            {showCotas &&
+              showCotas.map((cota, index) => (
                 <Col
                   key={index}
                   className="col-sm-3 col-md-4 col-lg-2 mt-2 d-flex justify-content-center"

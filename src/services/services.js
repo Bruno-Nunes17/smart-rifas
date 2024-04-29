@@ -30,19 +30,7 @@ export const getRifas = async (token, filter = "all") => {
   const header = headerFormat(token);
   try {
     const response = await axios.get(`${baseUrl}/rifas`, header);
-    let rifas = [];
-
-    if (filter === "all") return { rifas: response.data };
-
-    for (const rifa of response.data) {
-      const rifafiltrada = checkDate(rifa.date);
-      if (rifafiltrada && filter === "current") {
-        rifas.push(rifa);
-      }
-      if (!rifafiltrada && filter === "finish") {
-        rifas.push(rifa);
-      }
-    }
+    let rifas = response.data;
     return {
       rifas,
     };
@@ -67,26 +55,11 @@ export const getSellers = async (token) => {
 };
 
 export const getRifa = async (id, token, filter = "all") => {
-  let cotas = [];
   const header = headerFormat(token);
   const body = { id };
   try {
     const response = await axios.post(`${baseUrl}/rifa`, body, header);
     const rifa = response.data;
-
-    if (filter === "available") {
-      for (const cota of rifa.cotas) {
-        if (cota.status === "free") {
-          cotas.push(cota);
-        }
-      }
-      rifa.cotas = cotas;
-      return {
-        rifa,
-        error: [],
-      };
-    }
-
     return {
       rifa,
       error: [],

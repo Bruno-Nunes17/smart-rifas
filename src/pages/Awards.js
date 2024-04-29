@@ -2,28 +2,33 @@ import { Col, Container, Form, Row } from "react-bootstrap";
 import { CheckCircleOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import CardAward from "../components/CardAward";
 import { useAppContext } from "../context/AppContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getRifasAction } from "../context/action";
 import { getRifasSuccessType, logoutSuccessType } from "../context/types";
 import { useCookies } from "react-cookie";
+import { checkDate } from "../services/services";
 
 function Awards() {
   const { state, dispatch } = useAppContext();
   const [cookies] = useCookies(["User", "Token"]);
+  const [showRifas, setRifas] = useState();
   const navigate = useNavigate();
 
-  const checkDate = (date) => {
-    const dataRifa = new Date(date);
-    const dataAtual = new Date();
-    if (dataAtual > dataRifa) {
-      return;
-    }
-    return dataRifa;
-  };
+  const handlefilter = (filter = "all") => {
+    let rifas = [];
+    if (filter === "all") return setRifas(state.rifas);
 
-  const handlefilter = (filter) => {
-    getRifasAction(dispatch, state.token, filter);
+    for (const rifa of state.rifas) {
+      const rifafiltrada = checkDate(rifa.date);
+      if (rifafiltrada && filter === "current") {
+        rifas.push(rifa);
+      }
+      if (!rifafiltrada && filter === "finish") {
+        rifas.push(rifa);
+      }
+    }
+    setRifas(rifas);
   };
 
   useEffect(() => {
@@ -40,8 +45,13 @@ function Awards() {
     if (state.type !== getRifasSuccessType) {
       getRifasAction(dispatch, state.token);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, state.token]);
+
+  useEffect(() => {
+    if (state.rifas) setRifas(state.rifas);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(state.rifas)]);
 
   return (
     <>
@@ -63,8 +73,8 @@ function Awards() {
 
       <Container className="p-5" fluid="sm">
         <Row>
-          {state.rifas &&
-            state.rifas.map((rifa, index) => (
+          {showRifas &&
+            showRifas.map((rifa, index) => (
               <Col
                 key={index}
                 xs={12}

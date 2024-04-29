@@ -99,9 +99,9 @@ export const getRifasFailAction = (data) => ({
   payload: data,
 });
 
-export const getRifasAction = async (dispatch, token, filter) => {
+export const getRifasAction = async (dispatch, token) => {
   dispatch(getRifasInitAction());
-  const data = await services.getRifas(token, filter);
+  const data = await services.getRifas(token);
   if (!data) {
     dispatch(getRifasFailAction(data));
     return;
@@ -151,35 +151,14 @@ export const getRifaFailAction = (data) => ({
   payload: data,
 });
 
-export const getRifaAction = async (dispatch, id, token, filter) => {
+export const getRifaAction = async (dispatch, id, token) => {
   dispatch(getRifaInitAction());
-  const data = await services.getRifa(id, token, filter);
+  const data = await services.getRifa(id, token);
   if (!data) {
     dispatch(getRifaFailAction(data));
     return;
   }
   dispatch(getRifaSuccessAction(data));
-};
-
-// Get cota
-
-export const getCotaInitAction = () => ({
-  type: types.getCotaInitType,
-});
-
-export const getCotaSuccessAction = (data) => ({
-  type: types.getCotaSuccessType,
-  payload: data,
-});
-
-export const getCotaFailAction = (data) => ({
-  type: types.getCotaFailType,
-  payload: data,
-});
-
-export const getCotaAction = async (dispatch, cota) => {
-  dispatch(getCotaInitAction());
-  dispatch(getCotaSuccessAction(cota));
 };
 
 //
