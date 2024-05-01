@@ -8,11 +8,13 @@ import { getRifasAction } from "../context/action";
 import { getRifasSuccessType, logoutSuccessType } from "../context/types";
 import { useCookies } from "react-cookie";
 import { checkDate } from "../services/services";
+import Loader from "../components/Loader";
 
 function Awards() {
   const { state, dispatch } = useAppContext();
   const [cookies] = useCookies(["User", "Token"]);
   const [showRifas, setRifas] = useState();
+  const [showLoader, setLoader] = useState(false);
   const navigate = useNavigate();
 
   const handlefilter = (filter = "all") => {
@@ -43,13 +45,17 @@ function Awards() {
     if (state.type === logoutSuccessType) return;
     if (!state.type) return;
     if (state.type !== getRifasSuccessType) {
+      setLoader(true);
       getRifasAction(dispatch, state.token);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, state.token]);
 
   useEffect(() => {
-    if (state.rifas) setRifas(state.rifas);
+    if (state.rifas) {
+      setRifas(state.rifas);
+      setLoader(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(state.rifas)]);
 
@@ -72,39 +78,45 @@ function Awards() {
       </div>
 
       <Container className="p-5" fluid="sm">
-        <Row>
-          {showRifas &&
-            showRifas.map((rifa, index) => (
-              <Col
-                key={index}
-                xs={12}
-                md={4}
-                sm={1}
-                className="p-0 d-flex justify-content-center"
-              >
-                <CardAward
-                  id={rifa._id}
-                  clickable={checkDate(rifa.date)}
-                  children={
-                    !checkDate(rifa.date) ? (
-                      <CheckCircleOutlined className="p-1" />
-                    ) : (
-                      <ClockCircleOutlined className="p-1" />
-                    )
-                  }
-                  status={!checkDate(rifa.date) ? "Finalizado" : "Em andamento"}
-                  title={rifa.title}
-                  description={rifa.description}
-                  image={rifa.image}
-                  variant={
-                    !checkDate(rifa.date) ? "bg-secondary" : "bg-success"
-                  }
-                  date={rifa.date}
-                  price={rifa.price}
-                />
-              </Col>
-            ))}
-        </Row>
+        {showLoader ? (
+          <Loader />
+        ) : (
+          <Row>
+            {showRifas &&
+              showRifas.map((rifa, index) => (
+                <Col
+                  key={index}
+                  xs={12}
+                  md={4}
+                  sm={1}
+                  className="p-0 d-flex justify-content-center"
+                >
+                  <CardAward
+                    id={rifa._id}
+                    clickable={checkDate(rifa.date)}
+                    children={
+                      !checkDate(rifa.date) ? (
+                        <CheckCircleOutlined className="p-1" />
+                      ) : (
+                        <ClockCircleOutlined className="p-1" />
+                      )
+                    }
+                    status={
+                      !checkDate(rifa.date) ? "Finalizado" : "Em andamento"
+                    }
+                    title={rifa.title}
+                    description={rifa.description}
+                    image={rifa.image}
+                    variant={
+                      !checkDate(rifa.date) ? "bg-secondary" : "bg-success"
+                    }
+                    date={rifa.date}
+                    price={rifa.price}
+                  />
+                </Col>
+              ))}
+          </Row>
+        )}
       </Container>
     </>
   );

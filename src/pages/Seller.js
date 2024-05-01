@@ -19,16 +19,16 @@ function Seller() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const body = {
-      name: e.target.form.nome.value,
-      telephone: e.target.form.telefone.value,
-      password: e.target.form.senha.value,
+      name: e.target.nome.value,
+      telephone: e.target.telefone.value,
+      password: e.target.senha.value,
     };
     register(body);
     setShowFeedBack(true);
   };
 
   useEffect(() => {
-    if (!state.token && !cookies.Token ) navigate("/login");
+    if (!state.token && !cookies.Token) navigate("/login");
   });
 
   return (
@@ -47,23 +47,30 @@ function Seller() {
       )}
       <Row>
         <Col>
-          <Form autoComplete="off">
+          <Form autoComplete="off" onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="nome">
               <Form.Label>Nome</Form.Label>
-              <Form.Control type="name" placeholder="Insira o nome" />
+              <Form.Control type="name" placeholder="Insira o nome" required />
             </Form.Group>
             <Form.Group className="mb-3" controlId="telefone">
               <Form.Label>Telefone</Form.Label>
-              <Form.Control type="tel" placeholder="Insira seu telefone" />
+              <Form.Control
+                type="tel"
+                placeholder="Insira seu telefone"
+                required
+              />
             </Form.Group>
             <Form.Group className="mb-3" controlId="senha">
               <Form.Label>Senha</Form.Label>
-              <Form.Control type="password" placeholder="Insira sua senha" />
+              <Form.Control
+                type="password"
+                placeholder="Insira sua senha"
+                required
+              />
             </Form.Group>
             <Button
-              onClick={(e) => handleSubmit(e)}
               className="w-100 mt-3"
-              variant="primary"
+              variant="dark"
               size="lg"
               type="submit"
             >

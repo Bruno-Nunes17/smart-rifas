@@ -46,7 +46,7 @@ function CardAward({
       <Card.Body className="d-flex justify-content-end flex-column">
         <Card.Title>{title}</Card.Title>
         <Card.Text> {description}</Card.Text>
-        <Button onClick={() => navigate(`/detalhes/${id}`)} variant="warning">
+        <Button onClick={() => navigate(`/detalhes/${id}`)} variant="dark">
           Mais Detalhes
         </Button>
       </Card.Body>

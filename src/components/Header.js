@@ -47,20 +47,21 @@ function Header() {
             Smart Rifas
           </h3>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="offcanvasNavbar-expand-sm" />
-        <Navbar.Offcanvas
-          id="offcanvasNavbar-expand-sm"
-          aria-labelledby="offcanvasNavbarLabel-expand-sm"
-          placement="end"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title id="offcanvasNavbarLabel-expand-sm">
-              Smart Rifas
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body className="bg-dark">
-            {state.token && (
-              <>
+
+        {state.token && (
+          <>
+            <Navbar.Toggle aria-controls="offcanvasNavbar-expand-sm" />
+            <Navbar.Offcanvas
+              id="offcanvasNavbar-expand-sm"
+              aria-labelledby="offcanvasNavbarLabel-expand-sm"
+              placement="end"
+            >
+              <Offcanvas.Header closeButton>
+                <Offcanvas.Title id="offcanvasNavbarLabel-expand-sm">
+                  Smart Rifas
+                </Offcanvas.Title>
+              </Offcanvas.Header>
+              <Offcanvas.Body className="bg-dark">
                 {state.user.admin && (
                   <Nav className="ms-auto">
                     <Nav.Link
@@ -98,10 +99,10 @@ function Header() {
                     </Nav.Link>
                   )}
                 </Nav>
-              </>
-            )}
-          </Offcanvas.Body>
-        </Navbar.Offcanvas>
+              </Offcanvas.Body>
+            </Navbar.Offcanvas>
+          </>
+        )}
       </Container>
     </Navbar>
   );

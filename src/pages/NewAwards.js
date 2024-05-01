@@ -18,13 +18,13 @@ function NewAwards() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const dataPremio = new Date(e.target.form.date.value)
+    const dataPremio = new Date(e.target.date.value);
     const body = {
-      title: e.target.form.title.value,
-      description: e.target.form.description.value,
-      image: e.target.form.image.value,
-      numbers: e.target.form.numbers.value,
-      price: e.target.form.price.value,
+      title: e.target.title.value,
+      description: e.target.description.value,
+      image: e.target.image.value,
+      numbers: e.target.numbers.value,
+      price: e.target.price.value,
       date: dataPremio,
     };
     newRifa(body);
@@ -32,7 +32,7 @@ function NewAwards() {
   };
 
   useEffect(() => {
-    if (!state.token && !cookies.Token ) navigate("/login");
+    if (!state.token && !cookies.Token) navigate("/login");
   });
 
   return (
@@ -50,49 +50,48 @@ function NewAwards() {
         <Row className="my-3">
           <h4>Informações basicas</h4>
         </Row>
-        <Form autoComplete="off">
+        <Form autoComplete="off" onSubmit={handleSubmit}>
           <Row>
             <Form.Group className="mb-3" controlId="title">
               <Form.Label>titulo da Rifa</Form.Label>
-              <Form.Control type="name" placeholder="" />
+              <Form.Control type="name" placeholder="Iphone 8s" required />
             </Form.Group>
           </Row>
           <Row>
             <Form.Group className="mb-3" controlId="description">
               <Form.Label>Descrição</Form.Label>
-              <Form.Control type="name" placeholder="" />
+              <Form.Control type="name" placeholder="Lacrado, 128gb" required />
             </Form.Group>
           </Row>
           <Row>
             <Form.Group className="mb-3" controlId="image">
               <Form.Label>Imagen</Form.Label>
-              <Form.Control type="url" placeholder="" />
+              <Form.Control type="url" placeholder="https://picsum.photos/200/300" required />
             </Form.Group>
           </Row>
           <Row>
             <Form.Group className="mb-3" controlId="numbers">
               <Form.Label>Quantidade de numeros</Form.Label>
-              <Form.Control type="number" placeholder="" />
+              <Form.Control type="number" placeholder="100" required />
             </Form.Group>
           </Row>
           <Row>
             <Form.Group className="mb-3" controlId="price">
               <Form.Label>Valor do bilhete</Form.Label>
-              <Form.Control type="number" placeholder="" />
+              <Form.Control type="number" placeholder="25" required />
             </Form.Group>
           </Row>
           <Row>
             <Form.Group className="mb-3" controlId="date">
               <Form.Label>Data da premiação</Form.Label>
-              <Form.Control type="datetime-local" placeholder="" />
+              <Form.Control type="datetime-local" placeholder="" required />
             </Form.Group>
           </Row>
           <Button
             className="w-100 mt-3"
-            variant="success"
+            variant="dark"
             size="lg"
             type="submit"
-            onClick={(e) => handleSubmit(e)}
           >
             Criar Premiação
           </Button>

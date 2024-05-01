@@ -54,7 +54,7 @@ export const getSellers = async (token) => {
   }
 };
 
-export const getRifa = async (id, token, filter = "all") => {
+export const getRifa = async (id, token) => {
   const header = headerFormat(token);
   const body = { id };
   try {
