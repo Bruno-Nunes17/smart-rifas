@@ -85,6 +85,17 @@ export const newRifa = async (body, token) => {
   }
 };
 
+export const deleteRifa = async (body, token) => {
+  const header = headerFormat(token);
+  console.log(body);
+  try {
+    await axios.post(`${baseUrl}/rifa/delete`, body, header);
+  } catch (e) {
+    const { error } = e.response.data;
+    return { error };
+  }
+};
+
 export const adminLogin = async (body) => {
   try {
     const response = await axios.post(`${baseUrl}/login`, body);

@@ -1,4 +1,4 @@
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Dropdown, DropdownButton, Row } from "react-bootstrap";
 import CardNumber from "../components/CardNumber";
 import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
@@ -10,6 +10,7 @@ import { useAppContext } from "../context/AppContext";
 import { getRifaSuccessType } from "../context/types";
 import { useCookies } from "react-cookie";
 import Loader from "../components/Loader";
+import { EllipsisOutlined } from "@ant-design/icons";
 
 function Sale() {
   const [show, setShow] = useState(false);
@@ -44,6 +45,30 @@ function Sale() {
 
     sellCota(body);
     handleClose();
+  };
+
+  const handleQuit = (cota) => {
+    const cotaLimpa = cota;
+    cotaLimpa.client.nome = "";
+    cotaLimpa.client.telefone = "";
+    cotaLimpa.status = "free";
+    cotaLimpa.seller.nome = "";
+    cotaLimpa.seller.telefone = "";
+
+    const body = { id, cota: cotaLimpa };
+
+    console.log(body);
+
+    sellCota(body);
+  };
+
+  const handleEdit = (cota) => {
+    const cotaEditada = cota;
+    cotaEditada.status = "payd";
+
+    const body = { id, cota: cotaEditada };
+
+    sellCota(body);
   };
 
   const handlefilter = (filter = "all") => {
@@ -172,17 +197,40 @@ function Sale() {
                 <Col
                   key={index}
                   className="col-sm-3 col-md-4 col-lg-2 mt-2 d-flex justify-content-center"
-                  onClick={() => {
-                    handleClick(cota);
-                  }}
                 >
-                  <CardNumber
-                    style={{ cursor: "pointer" }}
-                    number={cota.number < 10 ? `0${cota.number}` : cota.number}
-                    variant={
-                      cota.status ? quotaStatus(cota.status) : "bg-light"
-                    }
-                  />
+                  {state.user.admin && cota.status !== "free" && (
+                    <DropdownButton
+                      id="dropdown-basic-button"
+                      title={<EllipsisOutlined />}
+                      className="bg-transparent"
+                      variant="outline-secondary"
+                    >
+                      <Dropdown.Item onClick={() => handleQuit(cota)}>
+                        Desistir
+                      </Dropdown.Item>
+                      {cota.status === "pending" && (
+                        <Dropdown.Item onClick={() => handleEdit(cota)}>
+                          Confirmar Pagamento
+                        </Dropdown.Item>
+                      )}
+                    </DropdownButton>
+                  )}
+                  <div
+                    onClick={() => {
+                      handleClick(cota);
+                    }}
+                  >
+                    <CardNumber
+                      style={{ cursor: "pointer" }}
+                      number={
+                        cota.number < 10 ? `0${cota.number}` : cota.number
+                      }
+                      variant={
+                        cota.status ? quotaStatus(cota.status) : "bg-light"
+                      }
+                      admin={state.user.admin}
+                    />
+                  </div>
                 </Col>
               ))}
           </Row>

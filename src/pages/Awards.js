@@ -10,6 +10,7 @@ import { useCookies } from "react-cookie";
 import { checkDate } from "../services/services";
 import Loader from "../components/Loader";
 
+
 function Awards() {
   const { state, dispatch } = useAppContext();
   const [cookies] = useCookies(["User", "Token"]);
@@ -112,6 +113,7 @@ function Awards() {
                     }
                     date={rifa.date}
                     price={rifa.price}
+                    admin={state.user.admin}
                   />
                 </Col>
               ))}

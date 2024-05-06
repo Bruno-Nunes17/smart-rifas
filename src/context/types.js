@@ -28,6 +28,10 @@ export const getRifaInitType = "get Rifa init";
 export const getRifaSuccessType = "get Rifa success";
 export const getRifaFailType = "get Rifa fail";
 
+export const deleteRifaInitType = "delete Rifa init";
+export const deleteRifaSuccessType = "delete Rifa success";
+export const deleteRifaFailType = "delete Rifa fail";
+
 export const sellCotaInitType = "sell cota init";
 export const sellCotaSuccessType = "sell cota success";
 export const sellCotaFailType = "sell cota fail";

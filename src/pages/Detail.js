@@ -1,5 +1,13 @@
 import { UserOutlined } from "@ant-design/icons";
-import { Col, Container, Row, Card } from "react-bootstrap";
+import {
+  Col,
+  Container,
+  Row,
+  Card,
+  Button,
+  Modal,
+  Form,
+} from "react-bootstrap";
 import { useAppContext } from "../context/AppContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -7,11 +15,15 @@ import { getRifaAction, getSellersAction } from "../context/action";
 import { getRifaSuccessType } from "../context/types";
 import { useCookies } from "react-cookie";
 import Loader from "../components/Loader";
+import { checkDate } from "../services/services";
 
 function Detail() {
   const { state, dispatch } = useAppContext();
   const [cookies] = useCookies(["User", "Token"]);
   const [showLoader, setLoader] = useState(false);
+  const [show, setShow] = useState(false);
+  const [showWinner, setShowWinner] = useState(false);
+  const [winner, setWinner] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -32,6 +44,26 @@ function Detail() {
     const profit = paydQuota * value;
 
     return profit;
+  };
+
+  const handleClose = () => {
+    setShow(false);
+    setShowWinner(false);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const cota = state.rifa.cotas[e.target.text.value];
+    if (cota.client.telefone === "") return;
+    setWinner(cota);
+    setShowWinner(true);
+    console.log(cota);
+  };
+
+  const handleDrawer = () => {
+    const data = checkDate(state.rifa.date);
+    if (data) return;
+    setShow(true);
   };
 
   useEffect(() => {
@@ -57,6 +89,50 @@ function Detail() {
 
   return (
     <>
+      <>
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Sortear Ganhador</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form id="cotas" autoComplete="off" onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="text">
+                <Form.Label>Numero sorteado</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Insira o numero sorteado"
+                  autoFocus
+                  required
+                />
+              </Form.Group>
+            </Form>
+            {showWinner && (
+              <Container>
+                <Row>
+                  <Col>Ganhador</Col>
+                  <Col>{winner.client.nome}</Col>
+                </Row>
+                <Row>
+                  <Col>Telefone</Col>
+                  <Col>{winner.client.telefone}</Col>
+                </Row>
+                <Row>
+                  <Col>Status</Col>
+                  <Col>{winner.status === "payd" ? "Pago" : "Não pago"}</Col>
+                </Row>
+              </Container>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Fechar
+            </Button>
+            <Button variant="primary" type="submit" form="cotas">
+              Confirmar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
       {showLoader ? (
         <Loader />
       ) : (
@@ -121,6 +197,21 @@ function Detail() {
                   </h4>
                 </Col>
               </Row>
+
+              {!checkDate(state.rifa.date) && (
+                <Row className="mt-5">
+                  <Col>
+                    <Button
+                      className="w-100 p-2 h1"
+                      variant="success"
+                      size="lg"
+                      onClick={() => handleDrawer()}
+                    >
+                      Sortear
+                    </Button>
+                  </Col>
+                </Row>
+              )}
             </Container>
           )}
           {state.sellers && (

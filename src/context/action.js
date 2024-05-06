@@ -161,6 +161,33 @@ export const getRifaAction = async (dispatch, id, token) => {
   dispatch(getRifaSuccessAction(data));
 };
 
+// Delete Rifa
+
+export const deleteRifaInitAction = () => ({
+  type: types.deleteRifaInitType,
+});
+
+export const deleteRifaSuccessAction = (data) => ({
+  type: types.deleteRifaSuccessType,
+  payload: data,
+});
+
+export const deleteRifaFailAction = (data) => ({
+  type: types.deleteRifaFailType,
+  payload: data,
+});
+
+export const deleteRifaAction = async (dispatch, id, token) => {
+  dispatch(deleteRifaInitAction());
+  const data = await services.deleteRifa(id, token);
+  if (!data) {
+    dispatch(deleteRifaFailAction(data));
+    return;
+  }
+  dispatch(deleteRifaSuccessAction(data));
+};
+
+
 //
 
 export const isLoggedInitAction = () => ({

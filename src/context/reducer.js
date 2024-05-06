@@ -50,6 +50,12 @@ export function reducer(state, action) {
         error: action.payload.error,
         rifa: action.payload.rifa,
       };
+    case types.deleteRifaSuccessType:
+      return {
+        ...state,
+        type: types.deleteRifaSuccessType,
+        error: action.payload.error,
+      };
     case types.sellCotaSuccessType:
       return {
         ...state,

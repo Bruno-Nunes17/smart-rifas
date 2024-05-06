@@ -5,6 +5,7 @@ import { useAppContext } from "../context/AppContext";
 import { newRifaAction } from "../context/action";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { newRifaSuccessType } from "../context/types";
 
 function NewAwards() {
   const [showFeedBack, setShowFeedBack] = useState(false);
@@ -30,6 +31,10 @@ function NewAwards() {
     newRifa(body);
     setShowFeedBack(true);
   };
+
+  useEffect(() => {
+    if (state.type === newRifaSuccessType) navigate("/rifas");
+  });
 
   useEffect(() => {
     if (!state.token && !cookies.Token) navigate("/login");
@@ -66,7 +71,11 @@ function NewAwards() {
           <Row>
             <Form.Group className="mb-3" controlId="image">
               <Form.Label>Imagen</Form.Label>
-              <Form.Control type="url" placeholder="https://picsum.photos/200/300" required />
+              <Form.Control
+                type="url"
+                placeholder="https://picsum.photos/200/300"
+                required
+              />
             </Form.Group>
           </Row>
           <Row>
@@ -87,12 +96,7 @@ function NewAwards() {
               <Form.Control type="datetime-local" placeholder="" required />
             </Form.Group>
           </Row>
-          <Button
-            className="w-100 mt-3"
-            variant="dark"
-            size="lg"
-            type="submit"
-          >
+          <Button className="w-100 mt-3" variant="dark" size="lg" type="submit">
             Criar Premiação
           </Button>
         </Form>
