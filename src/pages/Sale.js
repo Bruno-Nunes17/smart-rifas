@@ -38,8 +38,8 @@ function Sale() {
     cota.client.nome = e.target.nome.value;
     cota.client.telefone = e.target.telefone.value;
     cota.status = e.target.pagamento.value;
-    cota.seller.nome = state.user.name;
-    cota.seller.telefone = state.user.email ? "" : state.user.telephone;
+    cota.seller.nome = e.target.sellerName.value;
+    cota.seller.telefone = e.target.sellerNumber.value;
 
     const body = { id, cota };
 
@@ -148,10 +148,34 @@ function Sale() {
                   required
                 />
               </Form.Group>
+              {state.user.admin && (
+                <>
+                  <Form.Group className="mb-3" controlId="sellerName">
+                    <Form.Label>Nome do vendedor</Form.Label>
+                    <Form.Control
+                      type="name"
+                      placeholder="Insira o nome do vendedor"
+                      autoFocus
+                      required
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="sellerNumber">
+                    <Form.Label>Telefone do vendedor</Form.Label>
+                    <Form.Control
+                      type="tel"
+                      placeholder="Insira o telefone do vendedor"
+                      autoFocus
+                      required
+                    />
+                  </Form.Group>
+                </>
+              )}
               <Form.Group className="mb-3" controlId="pagamento">
                 <Form.Select aria-label="Default select example">
                   <option value="payd">Pagamento Confirmado</option>
-                  <option value="pending">Pagamento Pendente</option>
+                  {state.user.admin && (
+                    <option value="pending">Pagamento Pendente</option>
+                  )}
                 </Form.Select>
               </Form.Group>
             </Form>
