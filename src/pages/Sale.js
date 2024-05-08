@@ -35,11 +35,16 @@ function Sale() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const cota = showCota;
+    console.log(cota);
     cota.client.nome = e.target.nome.value;
     cota.client.telefone = e.target.telefone.value;
     cota.status = e.target.pagamento.value;
-    cota.seller.nome = e.target.sellerName.value;
-    cota.seller.telefone = e.target.sellerNumber.value;
+    cota.seller.nome = e.target.sellerName
+      ? e.target.sellerName.value
+      : state.user.name;
+    cota.seller.telefone = e.target.sellerNumber
+      ? e.target.sellerNumber.value
+      : state.user.telephone;
 
     const body = { id, cota };
 
@@ -56,8 +61,6 @@ function Sale() {
     cotaLimpa.seller.telefone = "";
 
     const body = { id, cota: cotaLimpa };
-
-    console.log(body);
 
     sellCota(body);
   };

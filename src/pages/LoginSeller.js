@@ -8,11 +8,16 @@ import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 import { loginSellerAction } from "../context/action";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 function LoginSeller() {
   const { state, dispatch } = useAppContext();
   const [showFeedBack, setShowFeedBack] = useState(false);
+  const [, setCookie] = useCookies(["User", "Token"]);
   const navigate = useNavigate();
+
+  const expirationDate = new Date();
+  expirationDate.setTime(expirationDate.getTime() + 2 * 60 * 60 * 1000);
 
   const login = async (body) => {
     loginSellerAction(dispatch, body);
@@ -29,7 +34,13 @@ function LoginSeller() {
     setShowFeedBack(true);
   };
 
-  useEffect(()=> {if(state.token) navigate('/')})
+  useEffect(() => {
+    if (state.token) {
+      navigate("/rifas");
+      setCookie("User", state.user, { path: "/", expires: expirationDate });
+      setCookie("Token", state.token, { path: "/", expires: expirationDate });
+    }
+  });
 
   return (
     <Container className="p-5">
